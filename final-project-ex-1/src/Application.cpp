@@ -214,7 +214,7 @@ void Application::handleKeyboardClick(Widget *sender) {
 
         playerGuess[currentRow].wordGuess->label("");
         playerGuess[currentRow].wordGuess->label(currentBlank);
-
+        playerGuess[currentRow].wordGuess->labelcolor(FL_DARK_BLUE);
         playerGuess[currentRow].word = updatedWord;
 
         cout << updatedWord << updatedWord.length() << endl;
@@ -238,14 +238,14 @@ void Application::initKeyboard(string row, int y) {
 // word enter (guesses) textbox
 void Application::initGuesses() {
     int width = gameWindow->w();
-    int rowWidth = 5 * 45 - 5;
+    int rowWidth = 5 * 55 - 5;
     int x = (width - rowWidth) / 2;
     int y = 10;
 
     for (size_t r = 0; r < 6; r++) {
-        playerGuess.push_back({new TextBox(x, y, 250, 40, "-----"), ""});
-        playerGuess.back().wordGuess->labelsize(40);
+        playerGuess.push_back({new TextBox(x, y, 280, 40, "-----"), ""});
         playerGuess.back().wordGuess->align(FL_ALIGN_CENTER);
+        playerGuess.back().wordGuess->labelsize(35);
         y += 45;
     }
 }
@@ -254,7 +254,7 @@ void Application::initGuesses() {
 void Application::handleCheckClick(Widget *sender) {
     string word = playerGuess[currentRow].wordGuess->label();
 
-    if (currentRow == 5 && word != targetWord) {
+    if (currentRow == 5 && word != makeUpper(targetWord)) {
         cout << "gameover" << endl;
         gameWindow->hide();
         showMessage("The word was: " + targetWord + "\n Game Over :(");
@@ -289,6 +289,7 @@ void Application::handleCheckClick(Widget *sender) {
         } else {
             checkLetterPosition();
             currentRow++;
+            playerGuess[currentRow].wordGuess->labelcolor(FL_DARK_BLUE);
             if(playerStatus == "Multi Player"){
                 checkWhosTurn();
             }
@@ -311,6 +312,7 @@ void Application::handleDeleteButtonClick(Widget *sender) {
 
 // reset game
 void Application::clearGameRecord() {
+    playerGuess[currentRow].wordGuess->labelcolor(FL_BLACK);
     for (size_t i = 0; i < 6; i++) {
         playerGuess[i].wordGuess->label("-----");
         playerGuess[i].word = "";
@@ -409,6 +411,7 @@ void Application::checkLetterPosition(){
             checkUpdate += playerGuess[currentRow].word[i];
         }
     }
+    playerGuess[currentRow].wordGuess->labelcolor(FL_BLACK);
     playerGuess[currentRow].wordGuess->label(checkUpdate);
 }
 
